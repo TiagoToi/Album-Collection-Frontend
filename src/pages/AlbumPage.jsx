@@ -143,6 +143,10 @@ export default function AlbumPage() {
   // Search
   const [search, setSearch] = useState('')
 
+  // View filter
+  const [view, setView] = useState('all') // 'all' | 'missing'
+  const [allExpanded, setAllExpanded] = useState(false)
+
   // Modal
   const [modalSticker, setModalSticker] = useState(null)
   const [modalError, setModalError] = useState('')
@@ -168,6 +172,54 @@ export default function AlbumPage() {
 
   const sections = buildSections(stickers)
 
+  function getDisplaySections(builtSections) {
+    if (view === 'all') return builtSections
+    const result = []
+    for (const sec of builtSections) {
+      if (sec.type === 'standalone') {
+        const missing = sec.stickers.filter((s) => (s.quantity || 0) === 0)
+        if (missing.length > 0) result.push({ ...sec, stickers: missing })
+      } else {
+        const filteredInner = sec.sections
+          .map((cs) => {
+            const missing = cs.stickers.filter((s) => (s.quantity || 0) === 0)
+            return missing.length > 0 ? { ...cs, stickers: missing } : null
+          })
+          .filter(Boolean)
+        if (filteredInner.length > 0) result.push({ ...sec, sections: filteredInner })
+      }
+    }
+    return result
+  }
+
+  const displaySections = getDisplaySections(sections)
+
+  function allSectionKeys(secs) {
+    const keys = []
+    for (const sec of secs) {
+      if (sec.type === 'standalone') {
+        keys.push(sectionKey(null, sec.code))
+      } else {
+        for (const cs of sec.sections) {
+          keys.push(sectionKey(sec.group, cs.code))
+        }
+      }
+    }
+    return keys
+  }
+
+  function handleExpandAll() {
+    if (allExpanded) {
+      setExpandedSections({})
+      setAllExpanded(false)
+    } else {
+      const next = {}
+      for (const k of allSectionKeys(displaySections)) next[k] = true
+      setExpandedSections(next)
+      setAllExpanded(true)
+    }
+  }
+
   // Total progress
   const totalOwned = stickers.filter((s) => (s.quantity || 0) > 0).length
   const totalCount = 994
@@ -178,6 +230,7 @@ export default function AlbumPage() {
   }
 
   function toggleSection(groupId, code) {
+    setAllExpanded(false)
     const key = sectionKey(groupId, code)
     setExpandedSections((prev) => {
       const next = { ...prev }
@@ -199,7 +252,7 @@ export default function AlbumPage() {
 
   // Search logic
   const lowerSearch = search.toLowerCase().trim()
-  const flatSections = flattenSections(sections)
+  const flatSections = flattenSections(displaySections)
   const filteredFlat = lowerSearch
     ? flatSections.filter((sec) => sec.label.toLowerCase().includes(lowerSearch))
     : null
@@ -256,11 +309,13 @@ export default function AlbumPage() {
     return (
       <StickerGroup
         key={key}
+        code={code}
         name={label}
         stickers={groupStickers}
         expanded={expanded}
         onToggle={() => toggleSection(groupId, code)}
         onCellClick={openModal}
+        missingCount={view === 'missing' ? groupStickers.length : undefined}
       />
     )
   }
@@ -279,7 +334,7 @@ export default function AlbumPage() {
   }
 
   function renderFullAlbum() {
-    return sections.map((sec) => {
+    return displaySections.map((sec) => {
       if (sec.type === 'standalone') {
         return (
           <div key={sec.code} className="album-standalone-section">
@@ -312,7 +367,28 @@ export default function AlbumPage() {
         </span>
       </div>
 
-      <SearchBar value={search} onChange={setSearch} />
+      <div className="album-tabs">
+        <button
+          className={`album-tab${view === 'all' ? ' active' : ''}`}
+          onClick={() => setView('all')}
+        >
+          Todos
+        </button>
+        <button
+          className={`album-tab${view === 'missing' ? ' active' : ''}`}
+          onClick={() => setView('missing')}
+        >
+          Faltando
+        </button>
+      </div>
+      <div className="search-expand-row">
+        <SearchBar value={search} onChange={setSearch} />
+        {!lowerSearch && (
+          <button className="btn-expand-all" onClick={handleExpandAll}>
+            {allExpanded ? 'Colapsar tudo' : 'Expandir tudo'}
+          </button>
+        )}
+      </div>
 
       <div className="album-scroll">
         {loading && <p className="loading-text">Carregando figurinhas...</p>}

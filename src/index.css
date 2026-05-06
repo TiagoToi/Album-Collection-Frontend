@@ -520,6 +520,42 @@ input[type='search']::-webkit-search-cancel-button {
   margin-bottom: 4px;
 }
 
+/* Tabs Todos / Faltando */
+.album-tabs {
+  display: flex;
+  background: var(--surface);
+  border-bottom: 1px solid var(--separator);
+  position: sticky;
+  top: 56px;
+  z-index: 90;
+}
+
+.album-tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  border-bottom: 2px solid transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  background: none;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.album-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.section-progress.missing {
+  color: var(--danger);
+  background: rgba(255, 59, 48, 0.08);
+}
+
 /* Group header (non-collapsible) */
 .group-header {
   padding: 8px 16px 4px;
@@ -530,7 +566,7 @@ input[type='search']::-webkit-search-cancel-button {
   letter-spacing: 0.1em;
   background: var(--background);
   position: sticky;
-  top: 56px;
+  top: 100px;
   z-index: 50;
 }
 
@@ -577,6 +613,17 @@ input[type='search']::-webkit-search-cancel-button {
   background: var(--surface-secondary);
   padding: 2px 8px;
   border-radius: 20px;
+}
+
+.section-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--primary);
+  background: rgba(0, 122, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
 }
 
 /* Sticker grid */
@@ -772,6 +819,32 @@ input[type='search']::-webkit-search-cancel-button {
 
 .search-results {
   padding-bottom: 32px;
+}
+
+/* Search + expand-all row */
+.search-expand-row {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border-bottom: 1px solid var(--separator);
+}
+
+.search-expand-row .search-bar-container {
+  flex: 1;
+  border-bottom: none;
+}
+
+.btn-expand-all {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary);
+  background: rgba(0, 122, 255, 0.08);
+  border-radius: 6px;
+  margin-right: 12px;
+  padding: 5px 10px;
+  white-space: nowrap;
+  min-height: 36px;
+  width: auto;
 }
 
 /* ============================================================

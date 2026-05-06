@@ -1,7 +1,7 @@
 import React from 'react'
 import StickerCell from './StickerCell.jsx'
 
-export default function StickerGroup({ name, stickers, expanded, onToggle, onCellClick }) {
+export default function StickerGroup({ name, code, stickers, expanded, onToggle, onCellClick, missingCount }) {
   const owned = stickers.filter((s) => (s.quantity || 0) > 0).length
   const total = stickers.length
 
@@ -13,9 +13,10 @@ export default function StickerGroup({ name, stickers, expanded, onToggle, onCel
         aria-expanded={expanded}
       >
         <span className="section-arrow">{expanded ? '▼' : '►'}</span>
+        {code && <span className="section-badge">{code}</span>}
         <span className="section-name">{name}</span>
-        <span className="section-progress">
-          {owned}/{total}
+        <span className={`section-progress${missingCount !== undefined ? ' missing' : ''}`}>
+          {missingCount !== undefined ? `${missingCount} faltando` : `${owned}/${total}`}
         </span>
       </button>
 
