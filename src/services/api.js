@@ -54,7 +54,7 @@ export async function joinCollection(token, inviteCode) {
   return request('/collections/join', {
     method: 'POST',
     headers: authHeaders(token),
-    body: JSON.stringify({ inviteCode }),
+    body: JSON.stringify({ invite_code: inviteCode }),
   })
 }
 

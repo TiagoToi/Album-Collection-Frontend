@@ -116,8 +116,8 @@ export default function CollectionsPage() {
 
         <div className="collections-list">
           {collections.map((col) => {
-            const owned = col.ownedCount ?? col.owned ?? 0
-            const total = col.totalCount ?? col.total ?? 994
+            const owned = col.owned_stickers ?? 0
+            const total = col.total_stickers ?? 994
             return (
               <div
                 key={col._id || col.id}
@@ -134,13 +134,13 @@ export default function CollectionsPage() {
                   </span>
                 </div>
                 <ProgressBar owned={owned} total={total} />
-                {col.inviteCode && (
+                {col.invite_code && (
                   <div className="invite-row" onClick={(e) => e.stopPropagation()}>
                     <span className="invite-label">Código:</span>
-                    <span className="invite-code">{col.inviteCode}</span>
+                    <span className="invite-code">{col.invite_code}</span>
                     <button
                       className="btn-copy"
-                      onClick={() => copyCode(col.inviteCode, col._id || col.id)}
+                      onClick={() => copyCode(col.invite_code, col._id || col.id)}
                     >
                       {copiedId === (col._id || col.id) ? 'Copiado!' : 'Copiar'}
                     </button>
