@@ -5,8 +5,7 @@ export default function StickerCell({ sticker, onClick }) {
 
   let cellClass = 'sticker-cell-compact'
   if (is_foil) cellClass += ' foil'
-  else if (quantity > 0) cellClass += ' owned'
-  else cellClass += ' not-owned'
+  cellClass += quantity > 0 ? ' owned' : ' not-owned'
 
   return (
     <button

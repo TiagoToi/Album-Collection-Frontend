@@ -566,7 +566,7 @@ input[type='search']::-webkit-search-cancel-button {
   letter-spacing: 0.1em;
   background: var(--background);
   position: sticky;
-  top: 100px;
+  top: 0;
   z-index: 50;
 }
 
@@ -672,11 +672,40 @@ input[type='search']::-webkit-search-cancel-button {
   background: rgba(0, 122, 255, 0.06);
 }
 
-/* Foil */
-.sticker-cell-compact.foil {
+/* Foil - not owned: starburst border, gold ring + 8 radiating spikes */
+.sticker-cell-compact.foil.not-owned {
   border-color: var(--gold);
-  background: linear-gradient(135deg, rgba(212, 160, 23, 0.12), rgba(255, 200, 50, 0.08));
-  box-shadow: 0 0 6px rgba(212, 160, 23, 0.35);
+  background: linear-gradient(135deg, rgba(138, 103, 15, 0.3), rgba(255, 200, 50, 0.1));
+  opacity: 0.65;
+  box-shadow: 0 0 5px rgba(212, 160, 23, 0.65), inset 0 0 8px rgba(255, 220, 60, 0.25);
+}
+
+/* Foil - owned: rich gold fill */
+.sticker-cell-compact.foil.owned {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, rgba(212, 160, 23, 0.5), rgba(255, 200, 50, 0.35));
+  box-shadow: 0 0 5px rgba(212, 160, 23, 0.65), inset 0 0 8px rgba(255, 220, 60, 0.25);
+  opacity: 1;
+}
+
+.sticker-cell-compact.foil.owned::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background: var(--gold);
+  clip-path: polygon(
+    50% 0%, 53% 8%, 59% 3%, 61% 11%, 68% 7%, 68% 15%,
+    76% 13%, 74% 21%, 82% 21%, 78% 29%, 87% 31%, 81% 38%,
+    90% 43%, 82% 48%, 90% 53%, 81% 57%, 88% 64%, 79% 66%,
+    84% 74%, 74% 74%, 76% 83%, 68% 81%, 66% 89%, 59% 85%,
+    55% 93%, 50% 88%, 45% 93%, 41% 85%, 34% 89%, 32% 81%,
+    24% 83%, 26% 74%, 16% 74%, 21% 66%, 12% 64%, 19% 57%,
+    10% 53%, 18% 48%, 10% 43%, 19% 38%, 13% 31%, 22% 29%,
+    18% 21%, 26% 21%, 24% 13%, 32% 15%, 32% 7%, 39% 11%,
+    41% 3%, 47% 8%
+  );
+  z-index: -1;
+  opacity: 0.8;
 }
 
 .cell-number {
