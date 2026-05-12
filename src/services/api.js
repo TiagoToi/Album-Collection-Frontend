@@ -71,3 +71,9 @@ export async function patchSticker(token, collectionId, code, number, delta) {
     body: JSON.stringify({ delta }),
   })
 }
+
+export async function getCollectionStats(token, collectionId) {
+  return request(`/collections/${collectionId}/stats`, {
+    headers: authHeaders(token),
+  })
+}

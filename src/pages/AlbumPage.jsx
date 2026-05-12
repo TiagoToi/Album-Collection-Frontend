@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
-import { getStickers, patchSticker } from '../services/api.js'
+import { getStickers, patchSticker, getCollectionStats } from '../services/api.js'
 import StickerGroup from '../components/StickerGroup.jsx'
 import SearchBar from '../components/SearchBar.jsx'
+import StatsTab from '../components/StatsTab.jsx'
 import { GROUPS, STANDALONE_SECTIONS, STANDALONE_LABELS } from '../constants/album.js'
 
 // Given a code, determine the display name.
@@ -122,8 +123,13 @@ export default function AlbumPage() {
   const [search, setSearch] = useState('')
 
   // View filter
-  const [view, setView] = useState('all') // 'all' | 'missing'
+  const [view, setView] = useState('all') // 'all' | 'missing' | 'stats'
   const [allExpanded, setAllExpanded] = useState(false)
+
+  // Stats
+  const [stats, setStats] = useState(null)
+  const [statsLoading, setStatsLoading] = useState(false)
+  const [statsError, setStatsError] = useState('')
 
   // Modal
   const [modalSticker, setModalSticker] = useState(null)
@@ -147,6 +153,23 @@ export default function AlbumPage() {
     }
     load()
   }, [id, token])
+
+  useEffect(() => {
+    if (view !== 'stats' || stats !== null) return
+    async function loadStats() {
+      setStatsLoading(true)
+      setStatsError('')
+      try {
+        const data = await getCollectionStats(token, id)
+        setStats(data)
+      } catch (err) {
+        setStatsError(err.message || 'Erro ao carregar estatísticas')
+      } finally {
+        setStatsLoading(false)
+      }
+    }
+    loadStats()
+  }, [view, id, token, stats])
 
   const sections = buildSections(stickers)
 
@@ -358,23 +381,40 @@ export default function AlbumPage() {
         >
           Faltando
         </button>
+        <button
+          className={`album-tab${view === 'stats' ? ' active' : ''}`}
+          onClick={() => setView('stats')}
+        >
+          Stats
+        </button>
       </div>
-      <div className="search-expand-row">
-        <SearchBar value={search} onChange={setSearch} />
-        {!lowerSearch && (
-          <button className="btn-expand-all" onClick={handleExpandAll}>
-            {allExpanded ? 'Colapsar tudo' : 'Expandir tudo'}
-          </button>
-        )}
-      </div>
+      {view !== 'stats' && (
+        <div className="search-expand-row">
+          <SearchBar value={search} onChange={setSearch} />
+          {!lowerSearch && (
+            <button className="btn-expand-all" onClick={handleExpandAll}>
+              {allExpanded ? 'Colapsar tudo' : 'Expandir tudo'}
+            </button>
+          )}
+        </div>
+      )}
 
-      <div className="album-scroll">
-        {loading && <p className="loading-text">Carregando figurinhas...</p>}
-        {error && <p className="form-error" style={{ margin: '16px' }}>{error}</p>}
-        {!loading && !error && (
-          lowerSearch ? renderSearchResults() : renderFullAlbum()
-        )}
-      </div>
+      {view === 'stats' ? (
+        <StatsTab
+          stickers={stickers}
+          stats={stats}
+          loading={statsLoading}
+          error={statsError}
+        />
+      ) : (
+        <div className="album-scroll">
+          {loading && <p className="loading-text">Carregando figurinhas...</p>}
+          {error && <p className="form-error" style={{ margin: '16px' }}>{error}</p>}
+          {!loading && !error && (
+            lowerSearch ? renderSearchResults() : renderFullAlbum()
+          )}
+        </div>
+      )}
 
       {/* Bottom-sheet modal */}
       {modalSticker && (
