@@ -672,19 +672,20 @@ input[type='search']::-webkit-search-cancel-button {
   background: rgba(0, 122, 255, 0.06);
 }
 
+.sticker-cell-compact.foil {
+  border-color: var(--gold);
+  box-shadow: 0 0 5px rgba(212, 160, 23, 0.65), inset 0 0 8px rgba(255, 220, 60, 0.25);
+}
+
 /* Foil - not owned: starburst border, gold ring + 8 radiating spikes */
 .sticker-cell-compact.foil.not-owned {
-  border-color: var(--gold);
-  background: linear-gradient(135deg, rgba(138, 103, 15, 0.3), rgba(255, 200, 50, 0.1));
-  opacity: 0.65;
-  box-shadow: 0 0 5px rgba(212, 160, 23, 0.65), inset 0 0 8px rgba(255, 220, 60, 0.25);
+  opacity: 0.45;
 }
 
 /* Foil - owned: rich gold fill */
 .sticker-cell-compact.foil.owned {
   border-color: var(--gold);
   background: linear-gradient(135deg, rgba(212, 160, 23, 0.5), rgba(255, 200, 50, 0.35));
-  box-shadow: 0 0 5px rgba(212, 160, 23, 0.65), inset 0 0 8px rgba(255, 220, 60, 0.25);
   opacity: 1;
 }
 
