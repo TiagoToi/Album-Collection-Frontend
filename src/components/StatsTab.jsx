@@ -44,7 +44,7 @@ export default function StatsTab({ stickers, stats, loading, error }) {
 
       <div className="stats-mini-grid">
         <div className="stats-mini-card">
-          <div className="stats-mini-label">Foils</div>
+          <div className="stats-mini-label">Brilhantes</div>
           {loading || !stats ? (
             <div className="stats-mini-value" style={{ color: 'var(--gold)' }}>—</div>
           ) : (
@@ -53,7 +53,7 @@ export default function StatsTab({ stickers, stats, loading, error }) {
                 {stats.owned_foils}
                 <span className="stats-mini-denom">/{stats.total_foils}</span>
               </div>
-              <div className="stats-mini-sub">{foilPct}% das foils</div>
+              <div className="stats-mini-sub">{foilPct}% das brilhantes</div>
             </>
           )}
         </div>
