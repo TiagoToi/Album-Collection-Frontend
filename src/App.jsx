@@ -6,15 +6,21 @@ import CollectionsPage from './pages/CollectionsPage.jsx'
 import AlbumPage from './pages/AlbumPage.jsx'
 
 function ProtectedRoute({ children }) {
-  const { token } = useAuth()
-  if (!token) return <Navigate to="/login" replace />
+  const { token, initialized } = useAuth()
+  if (!initialized) return null
+  if (!token) return <Navigate to="/" replace />
   return children
 }
 
 function AppRoutes() {
+  const { token, initialized } = useAuth()
+
+  if (!initialized) return null
+
   return (
     <Routes>
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={token ? <Navigate to="/collections" replace /> : <LoginPage />} />
+      <Route path="/login" element={<Navigate to="/" replace />} />
       <Route
         path="/collections"
         element={
@@ -31,7 +37,6 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route path="/" element={<Navigate to="/collections" replace />} />
     </Routes>
   )
 }
