@@ -4,29 +4,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 import { getStickers, patchSticker } from '../services/api.js'
 import StickerGroup from '../components/StickerGroup.jsx'
 import SearchBar from '../components/SearchBar.jsx'
-
-// Groups A–L with their country codes as they appear in the API `code` field.
-const GROUPS = [
-  { group: 'A', countries: ['MEX', 'RSA', 'KOR', 'CZE'] },
-  { group: 'B', countries: ['CAN', 'BIH', 'QAT', 'SUI'] },
-  { group: 'C', countries: ['BRA', 'MAR', 'HAI', 'SCO'] },
-  { group: 'D', countries: ['USA', 'PAR', 'AUS', 'TUR'] },
-  { group: 'E', countries: ['GER', 'CUW', 'CIV', 'ECU'] },
-  { group: 'F', countries: ['NED', 'JPN', 'SWE', 'TUN'] },
-  { group: 'G', countries: ['BEL', 'EGY', 'IRN', 'NZL'] },
-  { group: 'H', countries: ['ESP', 'CPV', 'KSA', 'URU'] },
-  { group: 'I', countries: ['FRA', 'SEN', 'IRQ', 'NOR'] },
-  { group: 'J', countries: ['ARG', 'ALG', 'AUT', 'JOR'] },
-  { group: 'K', countries: ['POR', 'COD', 'UZB', 'COL'] },
-  { group: 'L', countries: ['ENG', 'CRO', 'GHA', 'PAN'] },
-]
-
-// Standalone sections (not inside a group)
-const STANDALONE_SECTIONS = ['FWC', 'CC']
-const STANDALONE_LABELS = {
-  FWC: 'Fifa World Cup',
-  CC: 'Coca-Cola',
-}
+import { GROUPS, STANDALONE_SECTIONS, STANDALONE_LABELS } from '../constants/album.js'
 
 // Given a code, determine the display name.
 // If API provides a `name` field, that is used inside the group.
